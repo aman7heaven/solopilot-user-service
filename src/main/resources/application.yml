@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: user-service
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/solopilot_user_service
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+    hikari:
+      minimum-idle: 5               # 🟢 Minimum number of idle connections kept in pool
+      maximum-pool-size: 20         # 🔵 Maximum number of total connections (active + idle)
+      idle-timeout: 300000          # ⏱️ Max time (in ms) a connection can be idle before being removed (5 min)
+      max-lifetime: 1800000         # 🔄 Max lifetime (in ms) of a connection before it's retired (30 min)
+      connection-timeout: 30000     # ⌛ Max time (in ms) to wait for a connection from pool (30 sec)
+      pool-name: SoloPilotHikariCP  # 🏷️ Optional - sets pool name for logs/metrics
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        cache:
+          use_second_level_cache: true
+          region:
+            factory_class: org.hibernate.cache.jcache.JCacheRegionFactory
+      javax:
+        cache:
+          provider: org.ehcache.jsr107.EhcacheCachingProvider
+
+logging:
+  level:
+    org:
+      hibernate:
+        cache:
+          spi: DEBUG
