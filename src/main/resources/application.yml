@@ -31,6 +31,21 @@ spring:
         cache:
           provider: org.ehcache.jsr107.EhcacheCachingProvider
 
+  rabbitmq:
+    host: ${host}
+    port: 5672
+    username: ${username}
+    password: ${password}
+
+app:
+  rabbitmq:
+    exchanges:
+      notification: notification.exchange
+    queues:
+      email: notification.queue.email
+    routing-keys:
+      email: notification.routing.email
+
 logging:
   level:
     org:
