@@ -32,10 +32,11 @@ spring:
           provider: org.ehcache.jsr107.EhcacheCachingProvider
 
   rabbitmq:
-    host: ${host}
+    host: ${HOST}
     port: 5672
-    username: ${username}
-    password: ${password}
+    username: ${USERNAME}
+    password: ${PASSWORD}
+    virtual-host: /
 
 app:
   rabbitmq:
@@ -52,3 +53,7 @@ logging:
       hibernate:
         cache:
           spi: DEBUG
+      springframework:
+        boot:
+          context:
+            config: DEBUG
