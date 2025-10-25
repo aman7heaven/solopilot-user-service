@@ -9,7 +9,7 @@ import java.time.OffsetDateTime;
 import java.util.Optional;
 
 @Repository
-public interface PortfolioVisitorAnalyticsRepository extends JpaRepository<PortfolioVisitorAnalytics, Long> {
+public interface IPortfolioVisitorAnalyticsRepository extends JpaRepository<PortfolioVisitorAnalytics, Long> {
 
     /**
      * Check if a session already exists in analytics

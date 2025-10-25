@@ -1,11 +1,16 @@
 package com.solopilot.user.entity.admin;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(
         name = "tbl_admin_master",
@@ -18,7 +23,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
                 @Index(name = "idx_admin_last_name", columnList = "last_name")
         }
 )
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = "adminDetailsCache")
 public class Admin {
 
     @Id
@@ -58,4 +62,12 @@ public class Admin {
     @Column(name = "image_url", length = 1000, nullable = true)
     private String imageUrl;
 
+    @Column(name = "linkedin_url", length = 2000, nullable = true)
+    private String linkedinUrl;
+
+    @Column(name = "github_url", length = 2000, nullable = true)
+    private String githubUrl;
+
+    @Column(name = "twitter_url", length = 2000, nullable = true)
+    private String twitterUrl;
 }

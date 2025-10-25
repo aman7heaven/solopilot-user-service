@@ -12,7 +12,6 @@ import java.time.OffsetDateTime;
 @Data
 @Entity
 @Table(name = "tbl_experience_master")
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = "experienceCache")
 public class Experience {
 
     @Id

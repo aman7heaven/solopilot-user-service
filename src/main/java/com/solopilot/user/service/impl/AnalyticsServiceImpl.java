@@ -3,7 +3,7 @@ package com.solopilot.user.service.impl;
 import com.autopilot.config.logging.AppLogger;
 import com.solopilot.user.dto.response.AnalyticsResponse;
 import com.solopilot.user.entity.common.PortfolioVisitorAnalytics;
-import com.solopilot.user.repository.PortfolioVisitorAnalyticsRepository;
+import com.solopilot.user.repository.IPortfolioVisitorAnalyticsRepository;
 import com.solopilot.user.service.IAnalyticsService;
 import eu.bitwalker.useragentutils.Browser;
 import eu.bitwalker.useragentutils.OperatingSystem;
@@ -23,7 +23,7 @@ public class AnalyticsServiceImpl implements IAnalyticsService {
 
     private final AppLogger log = new AppLogger(LoggerFactory.getLogger(AnalyticsServiceImpl.class));
 
-    private final PortfolioVisitorAnalyticsRepository analyticsRepository;
+    private final IPortfolioVisitorAnalyticsRepository analyticsRepository;
 
     @Override
     public void trackVisit(String sessionId, HttpServletRequest request) {

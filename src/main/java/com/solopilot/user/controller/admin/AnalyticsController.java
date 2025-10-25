@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/admin")
+@RequestMapping("/api/v1/admin/analytics")
 @RequiredArgsConstructor
 public class AnalyticsController {
 
     private final IAnalyticsService analyticsService;
 
-    @GetMapping("/analytics/summary")
+    @GetMapping("/summary")
     @Operation(
             summary = "Get Analytics Summary",
             description = "Fetches the summarized analytics data including visitors, devices, and returning vs new visitors. " +

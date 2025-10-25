@@ -29,7 +29,6 @@ import java.time.OffsetDateTime;
                 @Index(name = "idx_composite_date_device", columnList = "dt_last_visited, device_type")
         }
 )
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = "portfolioVisitorCache")
 public class PortfolioVisitorAnalytics {
 
     /** Primary key for analytics record */

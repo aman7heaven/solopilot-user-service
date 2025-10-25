@@ -32,11 +32,10 @@ spring:
           provider: org.ehcache.jsr107.EhcacheCachingProvider
 
   rabbitmq:
-    host: ${HOST}
+    host: ${DOMAIN}
     port: 5672
     username: ${USERNAME}
     password: ${PASSWORD}
-    virtual-host: /
 
 app:
   rabbitmq:
@@ -46,6 +45,13 @@ app:
       email: notification.queue.email
     routing-keys:
       email: notification.routing.email
+
+cloudinary:
+  api:
+    key: ${CLOUDINARY_API_KEY}
+    secret: ${CLOUDINARY_API_SECRET}
+  cloud:
+    name: ${CLOUDINARY_CLOUD_NAME}
 
 logging:
   level:

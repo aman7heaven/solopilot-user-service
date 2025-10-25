@@ -11,7 +11,6 @@ import java.time.OffsetDateTime;
 @Data
 @Entity
 @Table(name = "tbl_info_cards")
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = "infoCardsCache")
 public class InfoCard {
 
     @Id
@@ -26,9 +25,6 @@ public class InfoCard {
 
     @Column(name = "last_name", length = 500, nullable = false)
     private String subTitle;
-
-    @Column(name = "image_url", length = 1000, nullable = true)
-    private String imageUrl;
 
     @Column(name = "section_type")
     private SectionType sectionType;

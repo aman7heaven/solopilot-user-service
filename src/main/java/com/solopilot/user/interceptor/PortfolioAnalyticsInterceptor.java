@@ -23,7 +23,7 @@ public class PortfolioAnalyticsInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        if (request.getRequestURI().equals("/api/v1/portfolio/hero-section")) {
+        if (request.getRequestURI().equals("/api/v1/user/portfolio/")) {
             String sessionId = null;
 
             if (request.getCookies() != null) {
