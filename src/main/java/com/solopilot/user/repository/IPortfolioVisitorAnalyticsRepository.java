@@ -35,15 +35,4 @@ public interface IPortfolioVisitorAnalyticsRepository extends JpaRepository<Port
     @Query("SELECT COUNT(pa) FROM PortfolioVisitorAnalytics pa WHERE pa.deviceType = :deviceType")
     long countByDeviceType(String deviceType);
 
-    /**
-     * Count new visitors
-     */
-    @Query("SELECT COUNT(DISTINCT pa.sessionId) FROM PortfolioVisitorAnalytics pa WHERE pa.isNewVisitor = true")
-    long countNewVisitors();
-
-    /**
-     * Count returning visitors
-     */
-    @Query("SELECT COUNT(DISTINCT pa.sessionId) FROM PortfolioVisitorAnalytics pa WHERE pa.isNewVisitor = false")
-    long countReturningVisitors();
 }

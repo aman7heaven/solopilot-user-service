@@ -3,6 +3,7 @@ package com.solopilot.user.service.impl;
 import com.autopilot.config.logging.AppLogger;
 import com.solopilot.user.dto.response.AnalyticsResponse;
 import com.solopilot.user.entity.common.PortfolioVisitorAnalytics;
+import com.solopilot.user.repository.AdminContactRepository;
 import com.solopilot.user.repository.IPortfolioVisitorAnalyticsRepository;
 import com.solopilot.user.service.IAnalyticsService;
 import eu.bitwalker.useragentutils.Browser;
@@ -24,6 +25,7 @@ public class AnalyticsServiceImpl implements IAnalyticsService {
     private final AppLogger log = new AppLogger(LoggerFactory.getLogger(AnalyticsServiceImpl.class));
 
     private final IPortfolioVisitorAnalyticsRepository analyticsRepository;
+    private final AdminContactRepository adminContactRepository;
 
     @Override
     public void trackVisit(String sessionId, HttpServletRequest request) {
@@ -136,8 +138,7 @@ public class AnalyticsServiceImpl implements IAnalyticsService {
         long mobile = analyticsRepository.countByDeviceType("mobile");
         long tablet = analyticsRepository.countByDeviceType("tablet");
 
-        long returningVisitors = analyticsRepository.countReturningVisitors();
-        long newVisitors = analyticsRepository.countNewVisitors();
+        long totalMessages = adminContactRepository.countMessages();
 
         return AnalyticsResponse.builder()
                 .visitors(AnalyticsResponse.Visitors.builder()
@@ -151,8 +152,7 @@ public class AnalyticsServiceImpl implements IAnalyticsService {
                         .mobile(mobile)
                         .tablet(tablet)
                         .build())
-                .returningVisitors(returningVisitors)
-                .newVisitors(newVisitors)
+                .totalMessages(totalMessages)
                 .build();
     }
 

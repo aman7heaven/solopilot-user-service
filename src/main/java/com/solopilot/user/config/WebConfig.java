@@ -17,6 +17,6 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(analyticsInterceptor)
-                .addPathPatterns("/api/v1/portfolio/**");
+                .addPathPatterns("/api/v1/user/portfolio/**");
     }
 }

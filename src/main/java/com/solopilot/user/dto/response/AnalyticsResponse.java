@@ -9,8 +9,7 @@ public class AnalyticsResponse {
 
     private Visitors visitors;
     private Devices devices;
-    private long returningVisitors;
-    private long newVisitors;
+    private Long totalMessages;
 
     @Data
     @Builder

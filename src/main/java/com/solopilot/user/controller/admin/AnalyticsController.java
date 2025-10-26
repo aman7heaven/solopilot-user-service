@@ -51,8 +51,7 @@ public class AnalyticsController {
                                                                 "mobile": 1987,
                                                                 "tablet": 113
                                                               },
-                                                              "returningVisitors": 2100,
-                                                              "newVisitors": 3421
+                                                              "totalMessages": 19
                                                             }
                                                             """
                                             )

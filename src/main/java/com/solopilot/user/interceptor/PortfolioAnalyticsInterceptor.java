@@ -23,28 +23,26 @@ public class PortfolioAnalyticsInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        if (request.getRequestURI().equals("/api/v1/user/portfolio/")) {
-            String sessionId = null;
+        String sessionId = null;
 
-            if (request.getCookies() != null) {
-                sessionId = Arrays.stream(request.getCookies())
-                        .filter(cookie -> COOKIE_SESSION_ID.equals(cookie.getName()))
-                        .findFirst()
-                        .map(Cookie::getValue)
-                        .orElse(null);
-            }
-
-            if (StringUtils.isNullOrEmpty(sessionId)) {
-                sessionId = StringUtils.generateUUID();
-                Cookie cookie = new Cookie(COOKIE_SESSION_ID, sessionId);
-                cookie.setPath("/");
-                cookie.setHttpOnly(true);
-                cookie.setMaxAge(60 * 30); // 30 minutes
-                response.addCookie(cookie);
-            }
-
-            analyticsService.trackVisit(sessionId, request);
+        if (request.getCookies() != null) {
+            sessionId = Arrays.stream(request.getCookies())
+                    .filter(cookie -> COOKIE_SESSION_ID.equals(cookie.getName()))
+                    .findFirst()
+                    .map(Cookie::getValue)
+                    .orElse(null);
         }
+
+        if (StringUtils.isNullOrEmpty(sessionId)) {
+            sessionId = StringUtils.generateUUID();
+            Cookie cookie = new Cookie(COOKIE_SESSION_ID, sessionId);
+            cookie.setPath("/");
+            cookie.setHttpOnly(true);
+            cookie.setMaxAge(60 * 30); // 30 minutes
+            response.addCookie(cookie);
+        }
+
+        analyticsService.trackVisit(sessionId, request);
 
         return true;
     }
