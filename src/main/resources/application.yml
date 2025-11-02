@@ -63,3 +63,14 @@ logging:
         boot:
           context:
             config: DEBUG
+
+jwt:
+  keystore:
+    path: classpath:keys/jwt-keystore.p12
+    password: ${KEYSTORE_PASSWORD}
+    key-alias: jwt-key
+
+security:
+  jwt:
+    issuer: "solopilot"          # iss claim
+    ttl-seconds: 1800            # 30 minutes token TTL - short, rotate/refresh in prod

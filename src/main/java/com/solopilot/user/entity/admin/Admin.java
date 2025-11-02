@@ -29,13 +29,13 @@ public class Admin {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "uuid", length = 255, nullable = false, unique = true)
+    @Column(name = "uuid", length = 500, nullable = false, unique = true)
     private String uuid;
 
-    @Column(name = "first_name", length = 255, nullable = false)
+    @Column(name = "first_name", nullable = false)
     private String firstName;
 
-    @Column(name = "last_name", length = 255, nullable = false)
+    @Column(name = "last_name", nullable = false)
     private String lastName;
 
     @Column(name = "username", nullable = false, unique = true)
@@ -44,7 +44,7 @@ public class Admin {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "email", unique = true)
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
 
     @Column(name = "phone_number")
@@ -53,21 +53,21 @@ public class Admin {
     @Column(name = "address")
     private String address;
 
-    @Column(name = "professional_title", length = 500, nullable = true)
+    @Column(name = "professional_title", length = 500)
     private String professionalTitle;
 
-    @Column(name = "summary", nullable = false)
+    @Column(name = "summary")
     private String summary;
 
-    @Column(name = "image_url", length = 1000, nullable = true)
+    @Column(name = "image_url", length = 1000)
     private String imageUrl;
 
-    @Column(name = "linkedin_url", length = 2000, nullable = true)
+    @Column(name = "linkedin_url", length = 2000)
     private String linkedinUrl;
 
-    @Column(name = "github_url", length = 2000, nullable = true)
+    @Column(name = "github_url", length = 2000)
     private String githubUrl;
 
-    @Column(name = "twitter_url", length = 2000, nullable = true)
+    @Column(name = "twitter_url", length = 2000)
     private String twitterUrl;
 }
