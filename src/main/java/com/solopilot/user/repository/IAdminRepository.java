@@ -1,8 +1,8 @@
 package com.solopilot.user.repository;
 
+import com.portfolio.entity.Admin;
 import com.solopilot.user.dto.response.AboutSectionResponse;
 import com.solopilot.user.dto.response.HeroSectionResponse;
-import com.solopilot.user.entity.admin.Admin;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

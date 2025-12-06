@@ -5,13 +5,13 @@ import com.autopilot.config.exception.ApplicationExceptionTypes;
 import com.autopilot.enums.EventType;
 import com.autopilot.models.payload.QueuePayload;
 import com.autopilot.utils.StringUtils;
+import com.portfolio.entity.Admin;
 import com.portfolio.service.ICloudinaryService;
 import com.solopilot.user.dto.payload.*;
 import com.solopilot.user.dto.response.AboutSectionResponse;
 import com.solopilot.user.dto.response.ExperienceResponse;
 import com.solopilot.user.dto.response.HeroSectionResponse;
 import com.solopilot.user.dto.response.ProjectResponse;
-import com.solopilot.user.entity.admin.Admin;
 import com.autopilot.models.payload.Contact;
 import com.solopilot.user.entity.experience.Experience;
 import com.solopilot.user.entity.project.Project;
@@ -57,6 +57,11 @@ public class PortfolioServiceImpl implements IPortfolioService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
     public void updateHeroSection(HeroSectionPayload payload) {
         Admin admin = adminRepository.findFirstByOrderByIdAsc();
+
+        if (admin == null) {
+            throw new ApplicationException(ApplicationExceptionTypes.ADMIN_NOT_FOUND);
+        }
+
         admin.setFirstName(payload.getFirstName());
         admin.setLastName(payload.getLastName());
         admin.setProfessionalTitle(payload.getProfessionalTitle());
@@ -81,6 +86,11 @@ public class PortfolioServiceImpl implements IPortfolioService {
         }
 
         Admin admin = adminRepository.findFirstByOrderByIdAsc();
+
+        if (admin == null) {
+            throw new ApplicationException(ApplicationExceptionTypes.ADMIN_NOT_FOUND);
+        }
+
         admin.setSummary(payload.getAboutMe());
         admin.setLinkedinUrl(payload.getLinkedinUrl());
         admin.setTwitterUrl(payload.getTwitterUrl());

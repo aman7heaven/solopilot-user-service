@@ -1,6 +1,7 @@
 package com.solopilot.user.config;
 
 import com.autopilot.config.logging.AppLogger;
+import jakarta.annotation.PostConstruct;
 import lombok.Data;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
@@ -37,8 +38,21 @@ public class RabbitMQConfig {
         return new Jackson2JsonMessageConverter();
     }
 
+    private final ConnectionFactory connectionFactory;
+
+    @PostConstruct
+    public void initializeRabbit() {
+        try {
+            log.info("Forcing RabbitMQ connection at startup to trigger queue/exchange declarations...");
+            connectionFactory.createConnection().close();
+            log.info("RabbitMQ initialization completed.");
+        } catch (Exception e) {
+            log.error("Could not initialize RabbitMQ at startup", e);
+        }
+    }
+
     @Bean
-    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
+    public RabbitTemplate rabbitTemplate() {
         log.info("Creating RabbitTemplate with custom message converter and provided connection factory: {}", connectionFactory.getClass().getName());
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
         rabbitTemplate.setMessageConverter(messageConverter());

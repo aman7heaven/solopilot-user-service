@@ -4,6 +4,7 @@ import com.autopilot.config.exception.ApplicationException;
 import com.autopilot.config.exception.ApplicationExceptionTypes;
 import com.solopilot.user.dto.payload.LoginPayload;
 import com.solopilot.user.dto.payload.RegisterPayload;
+import com.solopilot.user.dto.payload.ResetPasswordPayload;
 import com.solopilot.user.service.IAuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -216,6 +217,107 @@ public class AuthController {
         String token = authHeader.substring(7);
         authService.logoutAdmin(token);
         return ResponseEntity.ok(Map.of("message", "Logout successful"));
+    }
+
+    @Operation(
+            summary = "Reset Admin Password",
+            description = "Reset password for the logged-in admin. Provide current password and new password. Authorization header (Bearer token) required.",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    required = true,
+                    description = "Reset password payload",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ResetPasswordPayload.class),
+                            examples = @ExampleObject(value = """
+                                    {
+                                      "oldPassword": "CurrentPass123!",
+                                      "newPassword": "NewSecurePass456!"
+                                    }
+                                    """)
+                    )
+            )
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Password reset successful",
+                    content = @Content(mediaType = "application/json",
+                            examples = @ExampleObject(value = """
+                                    {
+                                      "message": "Password updated successfully"
+                                    }
+                                    """))),
+
+            // The 4 specific validation errors (codes 30-33)
+            @ApiResponse(responseCode = "400", description = "Invalid payload - missing old/new password",
+                    content = @Content(mediaType = "application/json",
+                            examples = @ExampleObject(value = """
+                                    {
+                                      "code": 30,
+                                      "status": "BAD_REQUEST",
+                                      "message": "Invalid request. Please provide old and new password.",
+                                      "details": null
+                                    }
+                                    """))),
+
+            @ApiResponse(responseCode = "400", description = "Admin not found",
+                    content = @Content(mediaType = "application/json",
+                            examples = @ExampleObject(value = """
+                                    {
+                                      "code": 31,
+                                      "status": "BAD_REQUEST",
+                                      "message": "Admin account not found. Please try again later.",
+                                      "details": null
+                                    }
+                                    """))),
+
+            @ApiResponse(responseCode = "400", description = "Old password incorrect",
+                    content = @Content(mediaType = "application/json",
+                            examples = @ExampleObject(value = """
+                                    {
+                                      "code": 32,
+                                      "status": "BAD_REQUEST",
+                                      "message": "Old password is incorrect. Please enter the correct current password.",
+                                      "details": null
+                                    }
+                                    """))),
+
+            @ApiResponse(responseCode = "400", description = "New password same as old password",
+                    content = @Content(mediaType = "application/json",
+                            examples = @ExampleObject(value = """
+                                    {
+                                      "code": 33,
+                                      "status": "BAD_REQUEST",
+                                      "message": "New password cannot be the same as the old password.",
+                                      "details": null
+                                    }
+                                    """))),
+            @ApiResponse(responseCode = "401", description = "Missing token",
+                    content = @Content(mediaType = "application/json",
+                            examples = @ExampleObject(value = """
+                                    {
+                                      "code": 13,
+                                      "status": "UNAUTHORIZED",
+                                      "message": "Authorization token is missing.",
+                                      "details": null
+                                    }
+                                    """))),
+
+            @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
+    })
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(
+            @Parameter(in = ParameterIn.HEADER, name = "Authorization", required = true,
+                    description = "Authorization header with Bearer token",
+                    example = "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...")
+            @RequestHeader("Authorization") String authHeader,
+            @RequestBody ResetPasswordPayload payload) {
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new ApplicationException(ApplicationExceptionTypes.MISSING_AUTH_TOKEN);
+        }
+
+        String token = authHeader.substring(7);
+        authService.resetAdminPassword(token, payload);
+        return ResponseEntity.ok(Map.of("message", "Password updated successfully"));
     }
 
 }

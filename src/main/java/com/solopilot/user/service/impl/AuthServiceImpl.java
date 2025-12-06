@@ -3,10 +3,11 @@ package com.solopilot.user.service.impl;
 import com.autopilot.config.exception.ApplicationException;
 import com.autopilot.config.exception.ApplicationExceptionTypes;
 import com.autopilot.utils.StringUtils;
+import com.portfolio.entity.Admin;
 import com.portfolio.service.JwtService;
 import com.solopilot.user.dto.payload.RegisterPayload;
-import com.solopilot.user.entity.admin.Admin;
 import com.portfolio.entity.AdminToken;
+import com.solopilot.user.dto.payload.ResetPasswordPayload;
 import com.solopilot.user.repository.IAdminRepository;
 import com.portfolio.repository.IAdminTokenRepository;
 import com.solopilot.user.service.IAuthService;
@@ -100,4 +101,33 @@ public class AuthServiceImpl implements IAuthService {
 
         adminTokenRepository.save(adminToken);
     }
+
+    @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
+    public void resetAdminPassword(String token, ResetPasswordPayload payload) {
+
+        if (payload == null || payload.getOldPassword() == null || payload.getNewPassword() == null) {
+            throw new ApplicationException(ApplicationExceptionTypes.INVALID_PASSWORD_PAYLOAD);
+        }
+
+        Admin admin = adminRepository.findFirstByOrderByIdAsc();
+
+        if (admin == null) {
+            throw new ApplicationException(ApplicationExceptionTypes.ADMIN_NOT_FOUND);
+        }
+
+        // Validate old password
+        if (!passwordEncoder.matches(payload.getOldPassword(), admin.getPassword())) {
+            throw new ApplicationException(ApplicationExceptionTypes.INVALID_OLD_PASSWORD);
+        }
+
+        // Optional: Prevent reusing same password
+        if (passwordEncoder.matches(payload.getNewPassword(), admin.getPassword())) {
+            throw new ApplicationException(ApplicationExceptionTypes.PASSWORD_SAME_AS_OLD);
+        }
+
+        admin.setPassword(passwordEncoder.encode(payload.getNewPassword()));
+        adminRepository.save(admin);
+    }
+
 }

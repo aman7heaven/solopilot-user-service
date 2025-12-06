@@ -1,6 +1,7 @@
 package com.solopilot.user.service;
 
 import com.solopilot.user.dto.payload.RegisterPayload;
+import com.solopilot.user.dto.payload.ResetPasswordPayload;
 
 public interface IAuthService {
 
@@ -27,4 +28,6 @@ public interface IAuthService {
      * @param token The JWT token to revoke.
      */
     void logoutAdmin(String token);
+
+    void resetAdminPassword(String token, ResetPasswordPayload payload);
 }
