@@ -87,6 +87,21 @@ services:
       - solopilot-network
     restart: unless-stopped
 
+  frontend:
+    build:
+      context:  ../../solopilot-frontend               # same root as backends
+      dockerfile: docker/Dockerfile
+    image: solopilot/frontend:latest
+    container_name: solopilot-frontend
+    ports:
+      - "5173:5173"                  # host:container
+    depends_on:
+      user-service:
+        condition: service_healthy
+    networks:
+      - solopilot-network
+    restart: unless-stopped
+
 networks:
   solopilot-network:
     driver: bridge

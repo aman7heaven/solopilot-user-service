@@ -1,1 +1,1 @@
-docker compose --env-file .env-docker -f user-service/docker/docker-compose.yml up --build -d
+docker compose -p solopilot-backend --env-file .env-docker -f user-service/docker/docker-compose.yml up --build -d

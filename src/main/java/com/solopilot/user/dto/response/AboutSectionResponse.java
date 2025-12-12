@@ -11,6 +11,6 @@ public class AboutSectionResponse {
     private String aboutMe;
     private String profileImageUrl;
     private String linkedInUrl;
-    private String twitterUrl;
     private String githubUrl;
+    private String twitterUrl;
 }

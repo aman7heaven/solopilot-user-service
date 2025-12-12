@@ -1,6 +1,8 @@
 package com.solopilot.user.controller.user;
 
+import com.solopilot.user.dto.payload.ContactMessagePayload;
 import com.solopilot.user.dto.response.UserPortfolioResponse;
+import com.solopilot.user.service.IPortfolioService;
 import com.solopilot.user.service.IUserPortfolioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -9,10 +11,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Controller exposing the public API to retrieve a user's complete portfolio.
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserPortfolioController {
 
     private final IUserPortfolioService userPortfolioService;
+    private final IPortfolioService portfolioService;
 
     /**
      * Retrieves the complete portfolio of the user.
@@ -190,5 +192,35 @@ public class UserPortfolioController {
     @GetMapping("/")
     public ResponseEntity<UserPortfolioResponse> getUserPortfolio() {
         return ResponseEntity.ok(userPortfolioService.getUserPortfolio());
+    }
+
+    @Operation(
+            summary = "Send a Contact Message",
+            description = "Allows users to send a message or inquiry via the portfolio contact form.",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    required = true,
+                    description = "Contact message payload",
+                    content = @Content(
+                            schema = @Schema(implementation = ContactMessagePayload.class),
+                            examples = @ExampleObject(value = """
+                                        {
+                                          "name": "Aman Saxena",
+                                          "email": "aman.saxena@example.com",
+                                          "subject": "Collaboration Opportunity",
+                                          "message": "Hi Aman, I really liked your portfolio! Would you be interested in collaborating on a project?"
+                                        }
+                                    """)
+                    )
+            )
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Message sent successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid input data", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
+    })
+    @PostMapping("/send-message")
+    public ResponseEntity<?> sendMessage(@RequestBody ContactMessagePayload payload) {
+        portfolioService.sendMessage(payload);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -402,34 +402,4 @@ public class AdminPortfolioController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @Operation(
-            summary = "Send a Contact Message",
-            description = "Allows users to send a message or inquiry via the portfolio contact form.",
-            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    required = true,
-                    description = "Contact message payload",
-                    content = @Content(
-                            schema = @Schema(implementation = ContactMessagePayload.class),
-                            examples = @ExampleObject(value = """
-                                        {
-                                          "name": "Aman Saxena",
-                                          "email": "aman.saxena@example.com",
-                                          "subject": "Collaboration Opportunity",
-                                          "message": "Hi Aman, I really liked your portfolio! Would you be interested in collaborating on a project?"
-                                        }
-                                    """)
-                    )
-            )
-    )
-    @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Message sent successfully"),
-            @ApiResponse(responseCode = "400", description = "Invalid input data", content = @Content),
-            @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
-    })
-    @PostMapping("/send-message")
-    public ResponseEntity<?> sendMessage(@RequestBody ContactMessagePayload payload) {
-        portfolioService.sendMessage(payload);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
 }
