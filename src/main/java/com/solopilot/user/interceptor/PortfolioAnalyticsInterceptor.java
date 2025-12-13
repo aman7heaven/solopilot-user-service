@@ -5,9 +5,12 @@ import com.solopilot.user.service.IAnalyticsService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import java.time.Duration;
 import java.util.Arrays;
 
 import static com.autopilot.constants.AppConstants.COOKIE_SESSION_ID;
@@ -22,28 +25,33 @@ public class PortfolioAnalyticsInterceptor implements HandlerInterceptor {
     }
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+
         String sessionId = null;
 
         if (request.getCookies() != null) {
             sessionId = Arrays.stream(request.getCookies())
-                    .filter(cookie -> COOKIE_SESSION_ID.equals(cookie.getName()))
-                    .findFirst()
+                    .filter(c -> COOKIE_SESSION_ID.equals(c.getName()))
                     .map(Cookie::getValue)
+                    .findFirst()
                     .orElse(null);
         }
 
         if (StringUtils.isNullOrEmpty(sessionId)) {
             sessionId = StringUtils.generateUUID();
-            Cookie cookie = new Cookie(COOKIE_SESSION_ID, sessionId);
-            cookie.setPath("/");
-            cookie.setHttpOnly(true);
-            cookie.setMaxAge(60 * 30); // 30 minutes
-            response.addCookie(cookie);
+
+            ResponseCookie cookie = ResponseCookie.from(COOKIE_SESSION_ID, sessionId)
+                    .httpOnly(true)
+                    .secure(true)          // 🔥 REQUIRED in prod
+                    .sameSite("None")     // 🔥 REQUIRED cross-site
+                    .path("/")
+                    .maxAge(Duration.ofMinutes(30))
+                    .build();
+
+            response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
         }
 
         analyticsService.trackVisit(sessionId, request);
-
         return true;
     }
 
